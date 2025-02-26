@@ -1,0 +1,33 @@
+# Ignore virtual environment
+venv/
+.env
+*.pyc
+__pycache__/
+*.pyo
+*.pyd
+
+# Ignore IDE files (VS Code, PyCharm)
+.vscode/
+.idea/
+*.swp
+
+# Ignore logs and cache
+logs/
+*.log
+*.sqlite3
+db.sqlite3
+
+# Ignore compiled Python files
+*.pyc
+*.pyo
+*.pyd
+__pycache__/
+
+# Ignore OS-specific files
+.DS_Store
+Thumbs.db
+
+# Ignore environment and package files
+Pipfile
+Pipfile.lock
+requirements.txt
