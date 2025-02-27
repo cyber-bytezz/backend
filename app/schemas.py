@@ -15,7 +15,7 @@ class ProductCreate(BaseModel):
     price: float
     category: str
     stock: int
-    image_url: Optional[str] = None  # ✅ Image Field Added
+    image_url: Optional[str] = None
 
 class ProductResponse(BaseModel):
     id: int
@@ -23,7 +23,7 @@ class ProductResponse(BaseModel):
     price: float
     category: str
     stock: int
-    image_url: Optional[str] = None  # ✅ Ensure Image is Included in API Response
+    image_url: Optional[str] = None
 
     class Config:
         orm_mode = True
@@ -46,3 +46,4 @@ class CartResponse(BaseModel):
 
 class OrderCreate(BaseModel):
     user_id: int
+    payment_status: str  
