@@ -3,7 +3,7 @@ from app.routes import auth, products, cart, orders, admin, user
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.security import OAuth2PasswordBearer
 
-app = FastAPI(title="QuitQ E-commerce API")
+app = FastAPI(title="HexaMart API")
 
 # Ensure correct token authentication URL
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/login")
@@ -17,7 +17,7 @@ app.add_middleware(
     allow_headers=["*"],  # Allow all headers
 )
 
-# ✅ Include API routes
+# Include API routes
 app.include_router(auth.router)
 app.include_router(products.router)
 app.include_router(cart.router)

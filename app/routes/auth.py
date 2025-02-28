@@ -17,7 +17,7 @@ def register_user(user: UserCreate, db: Session = Depends(get_db)):
         raise HTTPException(status_code=400, detail="Email already registered")
 
     hashed_password = get_password_hash(user.password)
-    new_user = User(name=user.name, email=user.email, password_hash=hashed_password, is_admin=False)  # ✅ Default: False
+    new_user = User(name=user.name, email=user.email, password_hash=hashed_password, is_admin=False)
 
     db.add(new_user)
     db.commit()
@@ -26,27 +26,26 @@ def register_user(user: UserCreate, db: Session = Depends(get_db)):
     return {"message": "User registered successfully", "user_id": new_user.id}
 
 @router.post("/login")
-def login_user(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
-    """Authenticates user and returns JWT token."""
-    user = db.query(User).filter(User.email == form_data.username).first()
-    
-    if not user or not verify_password(form_data.password, user.password_hash):
+def login_user(
+    form_data: OAuth2PasswordRequestForm = Depends(),  
+    db: Session = Depends(get_db)
+):
+    """Authenticates a user and returns a JWT token."""
+    db_user = db.query(User).filter(User.email == form_data.username).first()
+
+    if not db_user or not verify_password(form_data.password, db_user.password_hash):
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Invalid credentials"
+            detail="Invalid credentials",
         )
 
-    access_token_expires = timedelta(minutes=60)  # Token expiration time
-    access_token = create_access_token(data={"sub": user.email}, expires_delta=access_token_expires)
+    access_token = create_access_token(
+        data={"sub": db_user.email, "is_admin": db_user.is_admin},
+        expires_delta=timedelta(minutes=60)
+    )
 
-    return {"access_token": access_token, "token_type": "bearer"}
-
-def login_user(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
-    user = db.query(User).filter(User.email == form_data.username).first()
-
-    if not user or not verify_password(form_data.password, user.password_hash):
-        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid credentials")
-
-    access_token = create_access_token({"sub": user.email, "is_admin": user.is_admin})
-    
-    return {"access_token": access_token, "token_type": "bearer", "user": {"email": user.email, "is_admin": user.is_admin}}
+    return {
+        "access_token": access_token,
+        "token_type": "bearer",
+        "is_admin": db_user.is_admin
+    }

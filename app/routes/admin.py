@@ -20,7 +20,7 @@ def admin_dashboard(current_user=Depends(get_current_user)):
 @router.get("/products")
 def admin_get_products(db: Session = Depends(get_db), current_user=Depends(get_current_user)):
     """Admin can view all products."""
-    verify_admin(current_user)  # ✅ Ensures Admin Access
+    verify_admin(current_user)
     return db.query(Product).all()
 
 @router.get("/orders")

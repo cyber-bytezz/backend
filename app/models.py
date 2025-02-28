@@ -27,7 +27,7 @@ class Product(Base):
     image_url = Column(String(255), nullable=True)
 
     carts = relationship("Cart", back_populates="product")
-    order_items = relationship("OrderItem", back_populates="product")
+    order_items = relationship("OrderItem", back_populates="product", cascade="all, delete")
 
 class Cart(Base):
     __tablename__ = "carts"
@@ -48,7 +48,7 @@ class Order(Base):
     total_price = Column(Float, nullable=False)
     status = Column(String(20), default="Pending")
     payment_status = Column(String(50), nullable=False)
-    shipping_address = Column(String(255), nullable=True)  # ✅ Added field
+    shipping_address = Column(String(255), nullable=True)  # Added field
     created_at = Column(DateTime, default=datetime.utcnow)
 
     user = relationship("User", back_populates="orders")
@@ -58,10 +58,10 @@ class OrderItem(Base):
     __tablename__ = "order_items"
 
     id = Column(Integer, primary_key=True, index=True)
-    order_id = Column(Integer, ForeignKey("orders.id", ondelete="CASCADE"))
-    product_id = Column(Integer, ForeignKey("products.id", ondelete="CASCADE"))
+    order_id = Column(Integer, ForeignKey("orders.id", ondelete="CASCADE"), nullable=False)
+    product_id = Column(Integer, ForeignKey("products.id", ondelete="CASCADE"), nullable=False)  #Ensure cascade delete
     quantity = Column(Integer, nullable=False)
     price = Column(Float, nullable=False)
 
     order = relationship("Order", back_populates="items")
-    product = relationship("Product")
+    product = relationship("Product", back_populates="order_items")
