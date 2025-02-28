@@ -224,7 +224,3 @@ uvicorn app.main:app --reload
 
 ## **11. Conclusion**
 The HexaMart backend is **secure, scalable, and optimized**. It follows **best practices in authentication, security, and database management**. This documentation serves as a **reference for understanding and modifying the backend as needed**.
-
----
-
-This **dedicated documentation** covers every aspect of the backend system **A-Z**. Now, let’s move to frontend documentation! 🚀
